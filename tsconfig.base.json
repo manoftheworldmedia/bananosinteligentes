@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@bananos/billing": ["packages/billing/src/index.ts"],
+      "@bananos/banana-chat": ["packages/banana-chat/src/index.ts"],
+      "@bananos/config": ["packages/config/src/index.ts"],
+      "@bananos/core": ["packages/core/src/index.ts"],
+      "@bananos/database": ["packages/database/src/index.ts"],
+      "@bananos/ingestion": ["packages/ingestion/src/index.ts"],
+      "@bananos/insights": ["packages/insights/src/index.ts"],
+      "@bananos/knowledge-graph": ["packages/knowledge-graph/src/index.ts"],
+      "@bananos/memory": ["packages/memory/src/index.ts"],
+      "@bananos/object-storage": ["packages/object-storage/src/index.ts"],
+      "@bananos/brand-tokens": ["packages/brand-tokens/src/index.ts"]
+    },
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist"
+  }
+}

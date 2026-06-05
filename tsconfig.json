@@ -1,0 +1,18 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./apps/api" },
+    { "path": "./apps/worker" },
+    { "path": "./packages/billing" },
+    { "path": "./packages/banana-chat" },
+    { "path": "./packages/config" },
+    { "path": "./packages/core" },
+    { "path": "./packages/database" },
+    { "path": "./packages/ingestion" },
+    { "path": "./packages/insights" },
+    { "path": "./packages/knowledge-graph" },
+    { "path": "./packages/memory" },
+    { "path": "./packages/object-storage" },
+    { "path": "./packages/brand-tokens" }
+  ]
+}

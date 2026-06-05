@@ -1,0 +1,122 @@
+previews:
+  generation: manual
+  expireAfterDays: 3
+
+services:
+  - type: web
+    runtime: docker
+    name: bananos-test-api
+    region: oregon
+    plan: starter
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    preDeployCommand: corepack pnpm migrate:deploy
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    maxShutdownDelaySeconds: 60
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ENV
+        value: staging
+      - key: API_HOST
+        value: 0.0.0.0
+      - key: API_PORT
+        value: 10000
+      - key: LOG_LEVEL
+        value: info
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bananos-test-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: bananos-test-redis
+          property: connectionString
+      - key: INGESTION_QUEUE_NAME
+        value: ingestion-test
+      - key: GRAPH_OUTBOX_POLL_INTERVAL_MS
+        value: 5000
+      - key: GRAPH_OUTBOX_BATCH_SIZE
+        value: 50
+      - key: JWT_ISSUER
+        value: bananos-inteligentes-test
+      - key: JWT_AUDIENCE
+        value: bananos-api-test
+      - fromGroup: bananos-test-shared
+
+  - type: worker
+    runtime: docker
+    name: bananos-test-worker
+    region: oregon
+    plan: starter
+    dockerfilePath: ./apps/worker/Dockerfile
+    dockerContext: .
+    autoDeployTrigger: checksPass
+    maxShutdownDelaySeconds: 120
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ENV
+        value: staging
+      - key: LOG_LEVEL
+        value: info
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bananos-test-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: bananos-test-redis
+          property: connectionString
+      - key: INGESTION_QUEUE_NAME
+        value: ingestion-test
+      - key: GRAPH_OUTBOX_POLL_INTERVAL_MS
+        value: 5000
+      - key: GRAPH_OUTBOX_BATCH_SIZE
+        value: 50
+      - key: JWT_ISSUER
+        value: bananos-inteligentes-test
+      - key: JWT_AUDIENCE
+        value: bananos-api-test
+      - fromGroup: bananos-test-shared
+
+  - type: keyvalue
+    name: bananos-test-redis
+    region: oregon
+    plan: starter
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
+
+envVarGroups:
+  - name: bananos-test-shared
+    envVars:
+      - key: PASSWORD_PEPPER
+        generateValue: true
+      - key: AUDIT_HASH_SECRET
+        generateValue: true
+      - key: OBJECT_STORAGE_PROVIDER
+        value: s3
+      - key: OBJECT_STORAGE_ENDPOINT
+        sync: false
+      - key: OBJECT_STORAGE_REGION
+        sync: false
+      - key: OBJECT_STORAGE_BUCKET
+        sync: false
+      - key: OBJECT_STORAGE_ACCESS_KEY
+        sync: false
+      - key: OBJECT_STORAGE_SECRET_KEY
+        sync: false
+      - key: OBJECT_STORAGE_FORCE_PATH_STYLE
+        value: "false"
+
+databases:
+  - name: bananos-test-postgres
+    databaseName: bananos_test
+    user: bananos_test
+    region: oregon
+    plan: basic-256mb
+    postgresMajorVersion: "16"
+    ipAllowList: []
