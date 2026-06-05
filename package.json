@@ -1,0 +1,35 @@
+{
+  "name": "bananos-inteligentes",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Production foundation for the Bananos Inteligentes agricultural intelligence platform.",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "check": "pnpm -r check",
+    "dev": "pnpm --filter @bananos/api dev",
+    "dev:worker": "pnpm --filter @bananos/worker dev",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint": "eslint .",
+    "migrate:dev": "pnpm --filter @bananos/database migrate:dev",
+    "migrate:deploy": "pnpm --filter @bananos/database migrate:deploy",
+    "prisma:generate": "pnpm --filter @bananos/database prisma:generate",
+    "smoke:test-environment": "./scripts/smoke-test-environment.sh",
+    "test": "pnpm -r test",
+    "tokens:build": "pnpm --filter @bananos/brand-tokens build",
+    "typecheck": "tsc -b tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  }
+}

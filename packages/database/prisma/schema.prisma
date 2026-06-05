@@ -1,0 +1,1818 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DEPROVISIONED
+}
+
+enum PrincipalType {
+  USER
+  SERVICE_ACCOUNT
+}
+
+enum ConsentState {
+  REQUESTED
+  GRANTED
+  DENIED
+  REVOKED
+  EXPIRED
+  SUSPENDED
+}
+
+enum PolicyEffect {
+  ALLOW
+  DENY
+}
+
+enum PolicyStatus {
+  DRAFT
+  ACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+enum AuditOutcome {
+  SUCCESS
+  DENIED
+  FAILURE
+}
+
+enum ObjectOwnerType {
+  CLIENT
+  BANANOS
+  PUBLIC
+  PARTNER
+  MIXED
+}
+
+enum DataClass {
+  RAW
+  CANONICAL
+  ARTIFACT
+  MEMORY
+  AUDIT
+  OPERATIONAL
+}
+
+enum FileAssetStatus {
+  PENDING_UPLOAD
+  UPLOADED
+  PROCESSING
+  VALIDATED
+  REJECTED
+  FAILED
+  ARCHIVED
+}
+
+enum FileAssetKind {
+  SPREADSHEET
+  PDF
+  IMAGE
+  DOCUMENT
+  TEXT
+  OTHER
+}
+
+enum DatasetStatus {
+  DRAFT
+  VALIDATING
+  ACTIVE
+  QUARANTINED
+  ARCHIVED
+}
+
+enum ProcessingJobType {
+  METADATA_EXTRACTION
+  OCR
+  PARSE_SPREADSHEET
+  PARSE_PDF
+  PARSE_IMAGE
+  VALIDATE_FILE
+  CREATE_DATASET
+}
+
+enum ProcessingJobStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+enum ValidationSeverity {
+  INFO
+  WARNING
+  ERROR
+}
+
+enum LineageEventType {
+  UPLOADED
+  VERSION_CREATED
+  METADATA_EXTRACTED
+  OCR_COMPLETED
+  PARSED
+  VALIDATED
+  DATASET_CREATED
+  GOVERNANCE_DECISION
+  JOB_STATUS_CHANGED
+}
+
+enum BillingPolicyStatus {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum MarkupRuleType {
+  ORGANIZATION
+  PLAN
+  FEATURE
+  MODEL_PROVIDER
+  TOKEN_TYPE
+  FILE_PROCESSING_TYPE
+  REPORT_TYPE
+  INGESTION_TYPE
+  FIXED_MONTHLY_PLATFORM_FEE
+  USAGE_TIER
+  OVERAGE_RULE
+  ENTERPRISE_CUSTOM
+  PARTNER_PRICING
+}
+
+enum MarkupMethod {
+  PERCENTAGE
+  MULTIPLIER
+  FIXED_UNIT_PRICE
+  FIXED_AMOUNT
+}
+
+enum UsageEventType {
+  TOKEN
+  FILE_PROCESSING
+  REPORT
+  INSIGHT_GENERATION
+  INGESTION
+  MANUAL_ADJUSTMENT
+}
+
+enum BillingPeriodStatus {
+  OPEN
+  CLOSED
+  INVOICED
+  VOID
+}
+
+enum BudgetCapMode {
+  NONE
+  SOFT
+  HARD
+}
+
+enum UsageAlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum UsageExportAudience {
+  CLIENT
+  INTERNAL
+}
+
+enum LedgerEntryType {
+  USAGE
+  CREDIT
+  REFUND
+  ADJUSTMENT
+  PLATFORM_FEE
+  COMPED
+  DEMO
+}
+
+enum OverageStatus {
+  NONE
+  APPROACHING
+  OVERAGE
+  BLOCKED
+}
+
+enum InsightArtifactType {
+  FINDING
+  RECOMMENDATION
+  FORECAST
+  BENCHMARK
+  RISK_SCORE
+  PLAYBOOK
+  HYPOTHESIS
+  EXPERIMENT_RESULT
+  ALERT
+  MODEL_EVALUATION
+}
+
+enum InsightScope {
+  TENANT
+  COHORT
+  NETWORK
+  GLOBAL
+  INTERNAL
+}
+
+enum InsightStatus {
+  DRAFT
+  GENERATED
+  UNDER_REVIEW
+  APPROVED
+  PUBLISHED
+  DEPRECATED
+  RECALLED
+  ARCHIVED
+}
+
+enum InsightRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InsightGenerationMethod {
+  HUMAN_AUTHORED
+  RULE_BASED
+  STATISTICAL
+  MODEL_GENERATED
+  HYBRID
+  NETWORK_AGGREGATION
+}
+
+enum InsightReviewDecision {
+  REQUESTED
+  APPROVED
+  REJECTED
+  CHANGES_REQUESTED
+  RECALLED
+}
+
+enum EvidenceType {
+  CANONICAL_RECORD
+  AGGREGATED_METRIC
+  GRAPH_PATH
+  PRIOR_INSIGHT
+  PUBLIC_RESEARCH
+  EXPERT_NOTE
+  MODEL_OUTPUT
+  EXPERIMENT_RESULT
+  WEATHER_DATA
+  GEOSPATIAL_DATA
+}
+
+enum RevocationBehavior {
+  RETAIN_TENANT_ONLY
+  RECOMPUTE
+  REDACT
+  RECALL
+  ARCHIVE
+}
+
+enum GraphPartition {
+  TENANT
+  SHARED_CONCEPT
+  INSIGHTS
+  NETWORK_PROJECTION
+  INTERNAL
+}
+
+enum GraphRecordStatus {
+  PROPOSED
+  ACTIVE
+  DEPRECATED
+  RECALLED
+  ARCHIVED
+}
+
+enum GraphProposalDecision {
+  PENDING
+  APPROVED
+  REJECTED
+  APPLIED
+}
+
+enum GraphProjectionStatus {
+  DRAFT
+  BUILDING
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum GraphOutboxStatus {
+  PENDING
+  PROCESSING
+  PUBLISHED
+  FAILED
+}
+
+enum ConversationStatus {
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+enum ChatMessageRole {
+  SYSTEM
+  USER
+  ASSISTANT
+  TOOL
+}
+
+enum ChatMessageStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  BLOCKED
+}
+
+enum AiRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AiTraceStatus {
+  STARTED
+  COMPLETED
+  FAILED
+  BLOCKED
+}
+
+enum ToolInvocationStatus {
+  REQUESTED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  DENIED
+}
+
+enum MemoryType {
+  CONVERSATION
+  USER
+  TENANT
+  ENTITY
+  AGRONOMIC
+  NETWORK
+}
+
+enum MemoryScope {
+  SESSION
+  USER
+  ROLE
+  TEAM
+  FARM
+  BLOCK
+  CROP_CYCLE
+  TENANT
+  COHORT
+  NETWORK
+  GLOBAL
+}
+
+enum MemoryValidationStatus {
+  PENDING
+  VALIDATED
+  STALE
+  CONFLICTED
+  REVOKED
+  DELETED
+}
+
+enum ReportArtifactStatus {
+  REQUESTED
+  GENERATING
+  READY
+  FAILED
+  ARCHIVED
+}
+
+model Tenant {
+  id                   String                 @id @default(uuid()) @db.Uuid
+  slug                 String                 @unique
+  name                 String
+  status               TenantStatus           @default(ACTIVE)
+  dataResidency        String?                @map("data_residency")
+  metadata             Json                   @default("{}")
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            DateTime               @updatedAt @map("updated_at")
+  organizationUnits    OrganizationUnit[]
+  users                User[]
+  serviceAccounts      ServiceAccount[]
+  roles                Role[]
+  permissions          Permission[]
+  roleAssignments      RoleAssignment[]
+  consentGrants        ConsentGrant[]
+  policies             Policy[]
+  auditEvents          AuditEvent[]
+  objectRecords        ObjectRecord[]
+  fileAssets           FileAsset[]
+  datasets             Dataset[]
+  processingJobs       ProcessingJob[]
+  validationIssues     ValidationIssue[]
+  lineageEvents        LineageEvent[]
+  billingPolicies      ClientBillingPolicy[]
+  usageEvents          UsageEvent[]
+  usageRollups         UsageRollup[]
+  billingPeriods       BillingPeriod[]
+  invoiceLineItems     InvoiceLineItem[]
+  clientUsageSummaries ClientUsageSummary[]
+  internalCostLedger   InternalCostLedger[]
+  clientBillableLedger ClientBillableLedger[]
+  budgetPolicies       BudgetPolicy[]
+  usageAlerts          UsageAlert[]
+  usageExports         UsageExport[]
+  insightArtifacts     InsightArtifact[]
+  graphNodes           GraphNode[]
+  graphEdges           GraphEdge[]
+  graphChangeProposals GraphChangeProposal[]
+  graphProjections     GraphProjection[]
+  graphOutboxEvents    GraphOutboxEvent[]
+  conversations        Conversation[]
+  chatMessages         ChatMessage[]
+  memories             MemoryEntry[]
+  aiTraces             AiTrace[]
+  toolInvocations      ToolInvocation[]
+  reportArtifacts      ReportArtifact[]
+  promptTemplates      PromptTemplate[]
+  modelProfiles        ModelProfile[]
+
+  @@map("tenants")
+}
+
+model OrganizationUnit {
+  id        String             @id @default(uuid()) @db.Uuid
+  tenantId  String             @map("tenant_id") @db.Uuid
+  parentId  String?            @map("parent_id") @db.Uuid
+  name      String
+  type      String
+  metadata  Json               @default("{}")
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+  tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent    OrganizationUnit?  @relation("OrganizationUnitTree", fields: [parentId], references: [id])
+  children  OrganizationUnit[] @relation("OrganizationUnitTree")
+  users     User[]
+
+  @@index([tenantId])
+  @@map("organization_units")
+}
+
+model User {
+  id                   String                 @id @default(uuid()) @db.Uuid
+  tenantId             String                 @map("tenant_id") @db.Uuid
+  organizationUnitId   String?                @map("organization_unit_id") @db.Uuid
+  email                String
+  displayName          String                 @map("display_name")
+  passwordHash         String?                @map("password_hash")
+  status               UserStatus             @default(INVITED)
+  lastLoginAt          DateTime?              @map("last_login_at")
+  metadata             Json                   @default("{}")
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            DateTime               @updatedAt @map("updated_at")
+  tenant               Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  organizationUnit     OrganizationUnit?      @relation(fields: [organizationUnitId], references: [id])
+  roleAssignments      RoleAssignment[]
+  refreshTokens        RefreshToken[]
+  usageEvents          UsageEvent[]
+  internalCostLedger   InternalCostLedger[]
+  clientBillableLedger ClientBillableLedger[]
+  conversations        Conversation[]
+  chatMessages         ChatMessage[]
+  memories             MemoryEntry[]
+  aiTraces             AiTrace[]
+  toolInvocations      ToolInvocation[]
+  reportArtifacts      ReportArtifact[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("users")
+}
+
+model ServiceAccount {
+  id              String           @id @default(uuid()) @db.Uuid
+  tenantId        String           @map("tenant_id") @db.Uuid
+  name            String
+  description     String?
+  keyHash         String           @map("key_hash")
+  status          UserStatus       @default(ACTIVE)
+  metadata        Json             @default("{}")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roleAssignments RoleAssignment[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@map("service_accounts")
+}
+
+model Role {
+  id          String           @id @default(uuid()) @db.Uuid
+  tenantId    String?          @map("tenant_id") @db.Uuid
+  key         String
+  name        String
+  description String?
+  isSystem    Boolean          @default(false) @map("is_system")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  tenant      Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  permissions RolePermission[]
+  assignments RoleAssignment[]
+
+  @@unique([tenantId, key])
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(uuid()) @db.Uuid
+  tenantId    String?          @map("tenant_id") @db.Uuid
+  key         String
+  resource    String
+  action      String
+  description String?
+  isSystem    Boolean          @default(false) @map("is_system")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  tenant      Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  roles       RolePermission[]
+
+  @@unique([tenantId, key])
+  @@index([resource, action])
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @map("role_id") @db.Uuid
+  permissionId String     @map("permission_id") @db.Uuid
+  createdAt    DateTime   @default(now()) @map("created_at")
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model RoleAssignment {
+  id               String          @id @default(uuid()) @db.Uuid
+  tenantId         String          @map("tenant_id") @db.Uuid
+  principalType    PrincipalType   @map("principal_type")
+  userId           String?         @map("user_id") @db.Uuid
+  serviceAccountId String?         @map("service_account_id") @db.Uuid
+  roleId           String          @map("role_id") @db.Uuid
+  scope            Json            @default("{}")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  user             User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceAccount   ServiceAccount? @relation(fields: [serviceAccountId], references: [id], onDelete: Cascade)
+  role             Role            @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  tenant           Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, principalType])
+  @@index([userId])
+  @@index([serviceAccountId])
+  @@map("role_assignments")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model ConsentGrant {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  state          ConsentState   @default(REQUESTED)
+  dataScope      Json           @map("data_scope")
+  permittedUses  String[]       @map("permitted_uses")
+  grantedBy      String?        @map("granted_by") @db.Uuid
+  effectiveAt    DateTime?      @map("effective_at")
+  expiresAt      DateTime?      @map("expires_at")
+  revokedAt      DateTime?      @map("revoked_at")
+  revocationRule Json           @default("{}") @map("revocation_rule")
+  metadata       Json           @default("{}")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  tenant         Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  objectRecords  ObjectRecord[]
+  fileAssets     FileAsset[]
+  datasets       Dataset[]
+
+  @@index([tenantId, state])
+  @@map("consent_grants")
+}
+
+model Policy {
+  id          String       @id @default(uuid()) @db.Uuid
+  tenantId    String?      @map("tenant_id") @db.Uuid
+  key         String
+  version     Int
+  status      PolicyStatus @default(DRAFT)
+  effect      PolicyEffect
+  resource    String
+  action      String
+  conditions  Json         @default("{}")
+  description String?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  tenant      Tenant?      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, key, version])
+  @@index([tenantId, status])
+  @@index([resource, action])
+  @@map("policies")
+}
+
+model AuditEvent {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String?        @map("tenant_id") @db.Uuid
+  actorType      PrincipalType? @map("actor_type")
+  actorId        String?        @map("actor_id") @db.Uuid
+  action         String
+  resource       String
+  resourceId     String?        @map("resource_id")
+  outcome        AuditOutcome
+  policyDecision Json?          @map("policy_decision")
+  metadata       Json           @default("{}")
+  requestId      String?        @map("request_id")
+  ipAddress      String?        @map("ip_address")
+  userAgent      String?        @map("user_agent")
+  hash           String?
+  createdAt      DateTime       @default(now()) @map("created_at")
+  tenant         Tenant?        @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([action, resource])
+  @@map("audit_events")
+}
+
+model ObjectRecord {
+  id              String             @id @default(uuid()) @db.Uuid
+  tenantId        String             @map("tenant_id") @db.Uuid
+  bucket          String
+  objectKey       String             @map("object_key")
+  contentType     String?            @map("content_type")
+  byteSize        BigInt?            @map("byte_size")
+  checksum        String?
+  ownerType       ObjectOwnerType    @map("owner_type")
+  ownerId         String?            @map("owner_id")
+  dataClass       DataClass          @map("data_class")
+  visibilityScope String             @map("visibility_scope")
+  consentGrantId  String?            @map("consent_grant_id") @db.Uuid
+  metadata        Json               @default("{}")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  tenant          Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  consentGrant    ConsentGrant?      @relation(fields: [consentGrantId], references: [id], onDelete: SetNull)
+  fileAssets      FileAsset[]
+  fileVersions    FileAssetVersion[]
+
+  @@unique([bucket, objectKey])
+  @@index([tenantId, dataClass])
+  @@map("object_records")
+}
+
+model Dataset {
+  id               String            @id @default(uuid()) @db.Uuid
+  tenantId         String            @map("tenant_id") @db.Uuid
+  name             String
+  description      String?
+  status           DatasetStatus     @default(DRAFT)
+  ownerType        ObjectOwnerType   @map("owner_type")
+  visibilityScope  String            @map("visibility_scope")
+  consentGrantId   String?           @map("consent_grant_id") @db.Uuid
+  schemaSnapshot   Json?             @map("schema_snapshot")
+  metadata         Json              @default("{}")
+  createdBy        String?           @map("created_by") @db.Uuid
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  consentGrant     ConsentGrant?     @relation(fields: [consentGrantId], references: [id], onDelete: SetNull)
+  fileAssets       FileAsset[]
+  processingJobs   ProcessingJob[]
+  validationIssues ValidationIssue[]
+  lineageEvents    LineageEvent[]
+
+  @@index([tenantId, status])
+  @@map("datasets")
+}
+
+model FileAsset {
+  id                String               @id @default(uuid()) @db.Uuid
+  tenantId          String               @map("tenant_id") @db.Uuid
+  datasetId         String?              @map("dataset_id") @db.Uuid
+  objectRecordId    String?              @map("object_record_id") @db.Uuid
+  consentGrantId    String?              @map("consent_grant_id") @db.Uuid
+  filename          String
+  contentType       String?              @map("content_type")
+  byteSize          BigInt?              @map("byte_size")
+  checksum          String?
+  kind              FileAssetKind        @default(OTHER)
+  status            FileAssetStatus      @default(PENDING_UPLOAD)
+  version           Int                  @default(1)
+  ownerType         ObjectOwnerType      @map("owner_type")
+  dataClass         DataClass            @default(RAW) @map("data_class")
+  visibilityScope   String               @map("visibility_scope")
+  sourceLabel       String?              @map("source_label")
+  metadata          Json                 @default("{}")
+  extractedMetadata Json                 @default("{}") @map("extracted_metadata")
+  validationSummary Json                 @default("{}") @map("validation_summary")
+  createdBy         String?              @map("created_by") @db.Uuid
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         DateTime             @updatedAt @map("updated_at")
+  tenant            Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dataset           Dataset?             @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+  objectRecord      ObjectRecord?        @relation(fields: [objectRecordId], references: [id], onDelete: SetNull)
+  consentGrant      ConsentGrant?        @relation(fields: [consentGrantId], references: [id], onDelete: SetNull)
+  versions          FileAssetVersion[]
+  processingJobs    ProcessingJob[]
+  validationIssues  ValidationIssue[]
+  lineageEvents     LineageEvent[]
+  chatAttachments   ChatFileAttachment[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, kind])
+  @@index([datasetId])
+  @@map("file_assets")
+}
+
+model FileAssetVersion {
+  id             String        @id @default(uuid()) @db.Uuid
+  fileAssetId    String        @map("file_asset_id") @db.Uuid
+  objectRecordId String?       @map("object_record_id") @db.Uuid
+  version        Int
+  checksum       String?
+  byteSize       BigInt?       @map("byte_size")
+  metadata       Json          @default("{}")
+  createdBy      String?       @map("created_by") @db.Uuid
+  createdAt      DateTime      @default(now()) @map("created_at")
+  fileAsset      FileAsset     @relation(fields: [fileAssetId], references: [id], onDelete: Cascade)
+  objectRecord   ObjectRecord? @relation(fields: [objectRecordId], references: [id], onDelete: SetNull)
+
+  @@unique([fileAssetId, version])
+  @@map("file_asset_versions")
+}
+
+model ProcessingJob {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  fileAssetId  String?             @map("file_asset_id") @db.Uuid
+  datasetId    String?             @map("dataset_id") @db.Uuid
+  type         ProcessingJobType
+  status       ProcessingJobStatus @default(QUEUED)
+  queueName    String              @map("queue_name")
+  attempts     Int                 @default(0)
+  maxAttempts  Int                 @default(3) @map("max_attempts")
+  scheduledAt  DateTime            @default(now()) @map("scheduled_at")
+  startedAt    DateTime?           @map("started_at")
+  completedAt  DateTime?           @map("completed_at")
+  errorCode    String?             @map("error_code")
+  errorMessage String?             @map("error_message")
+  payload      Json                @default("{}")
+  result       Json                @default("{}")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+  tenant       Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fileAsset    FileAsset?          @relation(fields: [fileAssetId], references: [id], onDelete: Cascade)
+  dataset      Dataset?            @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, status])
+  @@index([fileAssetId])
+  @@index([datasetId])
+  @@map("processing_jobs")
+}
+
+model ValidationIssue {
+  id          String             @id @default(uuid()) @db.Uuid
+  tenantId    String             @map("tenant_id") @db.Uuid
+  fileAssetId String?            @map("file_asset_id") @db.Uuid
+  datasetId   String?            @map("dataset_id") @db.Uuid
+  severity    ValidationSeverity
+  code        String
+  message     String
+  path        String?
+  metadata    Json               @default("{}")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fileAsset   FileAsset?         @relation(fields: [fileAssetId], references: [id], onDelete: Cascade)
+  dataset     Dataset?           @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, severity])
+  @@index([fileAssetId])
+  @@index([datasetId])
+  @@map("validation_issues")
+}
+
+model LineageEvent {
+  id          String           @id @default(uuid()) @db.Uuid
+  tenantId    String           @map("tenant_id") @db.Uuid
+  fileAssetId String?          @map("file_asset_id") @db.Uuid
+  datasetId   String?          @map("dataset_id") @db.Uuid
+  eventType   LineageEventType @map("event_type")
+  sourceRef   Json?            @map("source_ref")
+  targetRef   Json?            @map("target_ref")
+  metadata    Json             @default("{}")
+  createdBy   String?          @map("created_by") @db.Uuid
+  createdAt   DateTime         @default(now()) @map("created_at")
+  tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fileAsset   FileAsset?       @relation(fields: [fileAssetId], references: [id], onDelete: Cascade)
+  dataset     Dataset?         @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, eventType])
+  @@index([fileAssetId])
+  @@index([datasetId])
+  @@map("lineage_events")
+}
+
+model AiProvider {
+  id             String                  @id @default(uuid()) @db.Uuid
+  key            String                  @unique
+  name           String
+  status         String                  @default("ACTIVE")
+  metadata       Json                    @default("{}")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  models         AiModel[]
+  priceSchedules ProviderPriceSchedule[]
+  internalCosts  InternalCostLedger[]
+
+  @@map("ai_providers")
+}
+
+model AiModel {
+  id             String                  @id @default(uuid()) @db.Uuid
+  providerId     String                  @map("provider_id") @db.Uuid
+  key            String
+  name           String
+  modality       String
+  status         String                  @default("ACTIVE")
+  metadata       Json                    @default("{}")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  provider       AiProvider              @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  priceSchedules ProviderPriceSchedule[]
+  internalCosts  InternalCostLedger[]
+
+  @@unique([providerId, key])
+  @@map("ai_models")
+}
+
+model ProviderPriceSchedule {
+  id                  String     @id @default(uuid()) @db.Uuid
+  providerId          String     @map("provider_id") @db.Uuid
+  modelId             String?    @map("model_id") @db.Uuid
+  currency            String     @default("USD")
+  unit                String
+  inputTokenPrice     Decimal    @default(0) @map("input_token_price") @db.Decimal(18, 8)
+  outputTokenPrice    Decimal    @default(0) @map("output_token_price") @db.Decimal(18, 8)
+  cachedTokenPrice    Decimal    @default(0) @map("cached_token_price") @db.Decimal(18, 8)
+  embeddingTokenPrice Decimal    @default(0) @map("embedding_token_price") @db.Decimal(18, 8)
+  multimodalUnitPrice Decimal    @default(0) @map("multimodal_unit_price") @db.Decimal(18, 8)
+  documentUnitPrice   Decimal    @default(0) @map("document_unit_price") @db.Decimal(18, 8)
+  effectiveFrom       DateTime   @map("effective_from")
+  effectiveUntil      DateTime?  @map("effective_until")
+  metadata            Json       @default("{}")
+  createdAt           DateTime   @default(now()) @map("created_at")
+  provider            AiProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  model               AiModel?   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@index([providerId, effectiveFrom])
+  @@index([modelId, effectiveFrom])
+  @@map("provider_price_schedules")
+}
+
+model ClientBillingPolicy {
+  id                      String                 @id @default(uuid()) @db.Uuid
+  tenantId                String                 @map("tenant_id") @db.Uuid
+  name                    String
+  status                  BillingPolicyStatus    @default(DRAFT)
+  planKey                 String?                @map("plan_key")
+  currency                String                 @default("USD")
+  monthlyIncludedCredits  Decimal                @default(0) @map("monthly_included_credits") @db.Decimal(18, 6)
+  fixedMonthlyPlatformFee Decimal                @default(0) @map("fixed_monthly_platform_fee") @db.Decimal(18, 6)
+  hardCapAmount           Decimal?               @map("hard_cap_amount") @db.Decimal(18, 6)
+  softCapAmount           Decimal?               @map("soft_cap_amount") @db.Decimal(18, 6)
+  partnerPricing          Boolean                @default(false) @map("partner_pricing")
+  demoUsageBillable       Boolean                @default(false) @map("demo_usage_billable")
+  metadata                Json                   @default("{}")
+  createdBy               String?                @map("created_by") @db.Uuid
+  createdAt               DateTime               @default(now()) @map("created_at")
+  updatedAt               DateTime               @updatedAt @map("updated_at")
+  tenant                  Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  markupRules             ClientMarkupRule[]
+  usageEvents             UsageEvent[]
+  billableLedger          ClientBillableLedger[]
+  billingPeriods          BillingPeriod[]
+  budgetPolicies          BudgetPolicy[]
+
+  @@index([tenantId, status])
+  @@map("client_billing_policies")
+}
+
+model ClientMarkupRule {
+  id              String                 @id @default(uuid()) @db.Uuid
+  billingPolicyId String                 @map("billing_policy_id") @db.Uuid
+  ruleType        MarkupRuleType         @map("rule_type")
+  priority        Int                    @default(100)
+  method          MarkupMethod
+  value           Decimal                @db.Decimal(18, 8)
+  featureKey      String?                @map("feature_key")
+  providerKey     String?                @map("provider_key")
+  modelKey        String?                @map("model_key")
+  tokenType       String?                @map("token_type")
+  processingType  String?                @map("processing_type")
+  reportType      String?                @map("report_type")
+  ingestionType   String?                @map("ingestion_type")
+  tierFrom        Decimal?               @map("tier_from") @db.Decimal(18, 6)
+  tierTo          Decimal?               @map("tier_to") @db.Decimal(18, 6)
+  overage         Boolean                @default(false)
+  effectiveFrom   DateTime               @default(now()) @map("effective_from")
+  effectiveUntil  DateTime?              @map("effective_until")
+  metadata        Json                   @default("{}")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  updatedAt       DateTime               @updatedAt @map("updated_at")
+  billingPolicy   ClientBillingPolicy    @relation(fields: [billingPolicyId], references: [id], onDelete: Cascade)
+  billableLedger  ClientBillableLedger[]
+
+  @@index([billingPolicyId, ruleType, priority])
+  @@map("client_markup_rules")
+}
+
+model UsageEvent {
+  id                     String                       @id @default(uuid()) @db.Uuid
+  tenantId               String                       @map("tenant_id") @db.Uuid
+  userId                 String?                      @map("user_id") @db.Uuid
+  billingPolicyId        String?                      @map("billing_policy_id") @db.Uuid
+  eventType              UsageEventType               @map("event_type")
+  sourceFeature          String                       @map("source_feature")
+  relatedType            String?                      @map("related_type")
+  relatedId              String?                      @map("related_id")
+  workflowKey            String?                      @map("workflow_key")
+  billable               Boolean                      @default(true)
+  internalComped         Boolean                      @default(false) @map("internal_comped")
+  demoUsage              Boolean                      @default(false) @map("demo_usage")
+  partnerUsage           Boolean                      @default(false) @map("partner_usage")
+  metadata               Json                         @default("{}")
+  occurredAt             DateTime                     @default(now()) @map("occurred_at")
+  createdAt              DateTime                     @default(now()) @map("created_at")
+  tenant                 Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user                   User?                        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  billingPolicy          ClientBillingPolicy?         @relation(fields: [billingPolicyId], references: [id], onDelete: SetNull)
+  tokenUsage             TokenUsageEvent?
+  fileProcessingUsage    FileProcessingUsageEvent?
+  reportUsage            ReportUsageEvent?
+  insightGenerationUsage InsightGenerationUsageEvent?
+  internalCost           InternalCostLedger?
+  clientBillable         ClientBillableLedger?
+
+  @@index([tenantId, occurredAt])
+  @@index([tenantId, sourceFeature])
+  @@index([userId, occurredAt])
+  @@map("usage_events")
+}
+
+model TokenUsageEvent {
+  id              String     @id @default(uuid()) @db.Uuid
+  usageEventId    String     @unique @map("usage_event_id") @db.Uuid
+  providerKey     String     @map("provider_key")
+  modelKey        String     @map("model_key")
+  inputTokens     Int        @default(0) @map("input_tokens")
+  outputTokens    Int        @default(0) @map("output_tokens")
+  cachedTokens    Int        @default(0) @map("cached_tokens")
+  embeddingTokens Int        @default(0) @map("embedding_tokens")
+  multimodalUnits Decimal    @default(0) @map("multimodal_units") @db.Decimal(18, 6)
+  usageEvent      UsageEvent @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+
+  @@map("token_usage_events")
+}
+
+model FileProcessingUsageEvent {
+  id             String     @id @default(uuid()) @db.Uuid
+  usageEventId   String     @unique @map("usage_event_id") @db.Uuid
+  processingType String     @map("processing_type")
+  fileAssetId    String?    @map("file_asset_id") @db.Uuid
+  bytesProcessed BigInt     @default(0) @map("bytes_processed")
+  pageCount      Int        @default(0) @map("page_count")
+  documentUnits  Decimal    @default(0) @map("document_units") @db.Decimal(18, 6)
+  ocrUnits       Decimal    @default(0) @map("ocr_units") @db.Decimal(18, 6)
+  usageEvent     UsageEvent @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+
+  @@map("file_processing_usage_events")
+}
+
+model ReportUsageEvent {
+  id           String     @id @default(uuid()) @db.Uuid
+  usageEventId String     @unique @map("usage_event_id") @db.Uuid
+  reportType   String     @map("report_type")
+  pageCount    Int        @default(0) @map("page_count")
+  exportFormat String?    @map("export_format")
+  usageEvent   UsageEvent @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+
+  @@map("report_usage_events")
+}
+
+model InsightGenerationUsageEvent {
+  id             String     @id @default(uuid()) @db.Uuid
+  usageEventId   String     @unique @map("usage_event_id") @db.Uuid
+  insightType    String     @map("insight_type")
+  generatedCount Int        @default(1) @map("generated_count")
+  usageEvent     UsageEvent @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+
+  @@map("insight_generation_usage_events")
+}
+
+model UsageRollup {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  periodStart       DateTime @map("period_start")
+  periodEnd         DateTime @map("period_end")
+  sourceFeature     String?  @map("source_feature")
+  userId            String?  @map("user_id") @db.Uuid
+  totalInternalCost Decimal  @default(0) @map("total_internal_cost") @db.Decimal(18, 6)
+  totalBillableCost Decimal  @default(0) @map("total_billable_cost") @db.Decimal(18, 6)
+  totalInputTokens  BigInt   @default(0) @map("total_input_tokens")
+  totalOutputTokens BigInt   @default(0) @map("total_output_tokens")
+  totalFileUnits    Decimal  @default(0) @map("total_file_units") @db.Decimal(18, 6)
+  eventCount        Int      @default(0) @map("event_count")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now()) @map("created_at")
+  tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, periodStart, periodEnd])
+  @@map("usage_rollups")
+}
+
+model BillingPeriod {
+  id                   String               @id @default(uuid()) @db.Uuid
+  tenantId             String               @map("tenant_id") @db.Uuid
+  billingPolicyId      String?              @map("billing_policy_id") @db.Uuid
+  periodStart          DateTime             @map("period_start")
+  periodEnd            DateTime             @map("period_end")
+  status               BillingPeriodStatus  @default(OPEN)
+  currency             String               @default("USD")
+  includedCredits      Decimal              @default(0) @map("included_credits") @db.Decimal(18, 6)
+  consumedCredits      Decimal              @default(0) @map("consumed_credits") @db.Decimal(18, 6)
+  totalBillableAmount  Decimal              @default(0) @map("total_billable_amount") @db.Decimal(18, 6)
+  totalInternalCost    Decimal              @default(0) @map("total_internal_cost") @db.Decimal(18, 6)
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
+  tenant               Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  billingPolicy        ClientBillingPolicy? @relation(fields: [billingPolicyId], references: [id], onDelete: SetNull)
+  invoiceLineItems     InvoiceLineItem[]
+  clientUsageSummaries ClientUsageSummary[]
+  marginReports        MarginReport[]
+
+  @@index([tenantId, periodStart, periodEnd])
+  @@map("billing_periods")
+}
+
+model InvoiceLineItem {
+  id              String                 @id @default(uuid()) @db.Uuid
+  tenantId        String                 @map("tenant_id") @db.Uuid
+  billingPeriodId String?                @map("billing_period_id") @db.Uuid
+  description     String
+  sourceFeature   String?                @map("source_feature")
+  quantity        Decimal                @default(0) @db.Decimal(18, 6)
+  unitPrice       Decimal                @default(0) @map("unit_price") @db.Decimal(18, 8)
+  amount          Decimal                @default(0) @db.Decimal(18, 6)
+  currency        String                 @default("USD")
+  metadata        Json                   @default("{}")
+  createdAt       DateTime               @default(now()) @map("created_at")
+  tenant          Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  billingPeriod   BillingPeriod?         @relation(fields: [billingPeriodId], references: [id], onDelete: SetNull)
+  billableLedger  ClientBillableLedger[]
+
+  @@index([tenantId, billingPeriodId])
+  @@map("invoice_line_items")
+}
+
+model ClientUsageSummary {
+  id                 String         @id @default(uuid()) @db.Uuid
+  tenantId           String         @map("tenant_id") @db.Uuid
+  billingPeriodId    String?        @map("billing_period_id") @db.Uuid
+  totalBillableUsage Decimal        @default(0) @map("total_billable_usage") @db.Decimal(18, 6)
+  budgetConsumed     Decimal        @default(0) @map("budget_consumed") @db.Decimal(18, 6)
+  remainingBudget    Decimal        @default(0) @map("remaining_budget") @db.Decimal(18, 6)
+  overageAmount      Decimal        @default(0) @map("overage_amount") @db.Decimal(18, 6)
+  usageByUser        Json           @default("{}") @map("usage_by_user")
+  usageByFeature     Json           @default("{}") @map("usage_by_feature")
+  usageByObject      Json           @default("{}") @map("usage_by_object")
+  usageTrend         Json           @default("[]") @map("usage_trend")
+  alerts             Json           @default("[]")
+  generatedAt        DateTime       @default(now()) @map("generated_at")
+  tenant             Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  billingPeriod      BillingPeriod? @relation(fields: [billingPeriodId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, generatedAt])
+  @@map("client_usage_summaries")
+}
+
+model InternalCostLedger {
+  id               String      @id @default(uuid()) @db.Uuid
+  tenantId         String      @map("tenant_id") @db.Uuid
+  usageEventId     String      @unique @map("usage_event_id") @db.Uuid
+  providerId       String?     @map("provider_id") @db.Uuid
+  modelId          String?     @map("model_id") @db.Uuid
+  actualProvider   String      @map("actual_provider")
+  actualModel      String?     @map("actual_model")
+  inputTokens      Int         @default(0) @map("input_tokens")
+  outputTokens     Int         @default(0) @map("output_tokens")
+  cachedTokens     Int         @default(0) @map("cached_tokens")
+  embeddingTokens  Int         @default(0) @map("embedding_tokens")
+  multimodalUnits  Decimal     @default(0) @map("multimodal_units") @db.Decimal(18, 6)
+  documentUnits    Decimal     @default(0) @map("document_units") @db.Decimal(18, 6)
+  providerUnitCost Decimal     @default(0) @map("provider_unit_cost") @db.Decimal(18, 8)
+  realInternalCost Decimal     @default(0) @map("real_internal_cost") @db.Decimal(18, 6)
+  sourceFeature    String      @map("source_feature")
+  userId           String?     @map("user_id") @db.Uuid
+  relatedType      String?     @map("related_type")
+  relatedId        String?     @map("related_id")
+  workflowKey      String?     @map("workflow_key")
+  internalNotes    Json        @default("{}") @map("internal_notes")
+  occurredAt       DateTime    @default(now()) @map("occurred_at")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  tenant           Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  usageEvent       UsageEvent  @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+  provider         AiProvider? @relation(fields: [providerId], references: [id], onDelete: SetNull)
+  model            AiModel?    @relation(fields: [modelId], references: [id], onDelete: SetNull)
+  user             User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, occurredAt])
+  @@index([actualProvider, actualModel])
+  @@index([sourceFeature])
+  @@map("internal_cost_ledger")
+}
+
+model ClientBillableLedger {
+  id                String               @id @default(uuid()) @db.Uuid
+  tenantId          String               @map("tenant_id") @db.Uuid
+  usageEventId      String               @unique @map("usage_event_id") @db.Uuid
+  billingPolicyId   String?              @map("billing_policy_id") @db.Uuid
+  markupRuleId      String?              @map("markup_rule_id") @db.Uuid
+  invoiceLineItemId String?              @map("invoice_line_item_id") @db.Uuid
+  billableUnits     Decimal              @default(0) @map("billable_units") @db.Decimal(18, 6)
+  clientUnitPrice   Decimal              @default(0) @map("client_unit_price") @db.Decimal(18, 8)
+  clientFacingCost  Decimal              @default(0) @map("client_facing_cost") @db.Decimal(18, 6)
+  overageStatus     OverageStatus        @default(NONE) @map("overage_status")
+  entryType         LedgerEntryType      @default(USAGE) @map("entry_type")
+  sourceFeature     String               @map("source_feature")
+  userId            String?              @map("user_id") @db.Uuid
+  relatedType       String?              @map("related_type")
+  relatedId         String?              @map("related_id")
+  workflowKey       String?              @map("workflow_key")
+  metadata          Json                 @default("{}")
+  occurredAt        DateTime             @default(now()) @map("occurred_at")
+  createdAt         DateTime             @default(now()) @map("created_at")
+  tenant            Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  usageEvent        UsageEvent           @relation(fields: [usageEventId], references: [id], onDelete: Cascade)
+  billingPolicy     ClientBillingPolicy? @relation(fields: [billingPolicyId], references: [id], onDelete: SetNull)
+  markupRule        ClientMarkupRule?    @relation(fields: [markupRuleId], references: [id], onDelete: SetNull)
+  invoiceLineItem   InvoiceLineItem?     @relation(fields: [invoiceLineItemId], references: [id], onDelete: SetNull)
+  user              User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, occurredAt])
+  @@index([sourceFeature])
+  @@index([userId, occurredAt])
+  @@map("client_billable_ledger")
+}
+
+model MarginReport {
+  id                  String         @id @default(uuid()) @db.Uuid
+  billingPeriodId     String?        @map("billing_period_id") @db.Uuid
+  generatedAt         DateTime       @default(now()) @map("generated_at")
+  totalProviderCost   Decimal        @default(0) @map("total_provider_cost") @db.Decimal(18, 6)
+  totalClientBillable Decimal        @default(0) @map("total_client_billable") @db.Decimal(18, 6)
+  grossMargin         Decimal        @default(0) @map("gross_margin") @db.Decimal(18, 6)
+  marginPercentage    Decimal        @default(0) @map("margin_percentage") @db.Decimal(18, 6)
+  costByProvider      Json           @default("{}") @map("cost_by_provider")
+  costByModel         Json           @default("{}") @map("cost_by_model")
+  costByFeature       Json           @default("{}") @map("cost_by_feature")
+  costByClient        Json           @default("{}") @map("cost_by_client")
+  revenueByClient     Json           @default("{}") @map("revenue_by_client")
+  marginByClient      Json           @default("{}") @map("margin_by_client")
+  tokenUsageByClient  Json           @default("{}") @map("token_usage_by_client")
+  fileCostByClient    Json           @default("{}") @map("file_cost_by_client")
+  reportCostByClient  Json           @default("{}") @map("report_cost_by_client")
+  expensiveUsers      Json           @default("[]") @map("expensive_users")
+  expensiveWorkflows  Json           @default("[]") @map("expensive_workflows")
+  budgetRisk          Json           @default("[]") @map("budget_risk")
+  anomalousUsage      Json           @default("[]") @map("anomalous_usage")
+  overageExposure     Json           @default("{}") @map("overage_exposure")
+  providerComparison  Json           @default("{}") @map("provider_comparison")
+  modelComparison     Json           @default("{}") @map("model_comparison")
+  billingPeriod       BillingPeriod? @relation(fields: [billingPeriodId], references: [id], onDelete: SetNull)
+
+  @@index([generatedAt])
+  @@map("margin_reports")
+}
+
+model BudgetPolicy {
+  id              String               @id @default(uuid()) @db.Uuid
+  tenantId        String               @map("tenant_id") @db.Uuid
+  billingPolicyId String?              @map("billing_policy_id") @db.Uuid
+  name            String
+  capMode         BudgetCapMode        @default(SOFT) @map("cap_mode")
+  budgetAmount    Decimal              @default(0) @map("budget_amount") @db.Decimal(18, 6)
+  alertThresholds Json                 @default("[]") @map("alert_thresholds")
+  appliesTo       Json                 @default("{}") @map("applies_to")
+  enabled         Boolean              @default(true)
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+  tenant          Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  billingPolicy   ClientBillingPolicy? @relation(fields: [billingPolicyId], references: [id], onDelete: SetNull)
+  alerts          UsageAlert[]
+
+  @@index([tenantId, enabled])
+  @@map("budget_policies")
+}
+
+model UsageAlert {
+  id             String             @id @default(uuid()) @db.Uuid
+  tenantId       String             @map("tenant_id") @db.Uuid
+  budgetPolicyId String?            @map("budget_policy_id") @db.Uuid
+  status         UsageAlertStatus   @default(OPEN)
+  severity       ValidationSeverity
+  code           String
+  message        String
+  threshold      Decimal?           @db.Decimal(18, 6)
+  observedValue  Decimal?           @map("observed_value") @db.Decimal(18, 6)
+  metadata       Json               @default("{}")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  resolvedAt     DateTime?          @map("resolved_at")
+  tenant         Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  budgetPolicy   BudgetPolicy?      @relation(fields: [budgetPolicyId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status])
+  @@map("usage_alerts")
+}
+
+model UsageExport {
+  id          String              @id @default(uuid()) @db.Uuid
+  tenantId    String?             @map("tenant_id") @db.Uuid
+  audience    UsageExportAudience
+  requestedBy String?             @map("requested_by") @db.Uuid
+  periodStart DateTime            @map("period_start")
+  periodEnd   DateTime            @map("period_end")
+  objectKey   String?             @map("object_key")
+  format      String
+  status      String              @default("REQUESTED")
+  filters     Json                @default("{}")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  completedAt DateTime?           @map("completed_at")
+  tenant      Tenant?             @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@map("usage_exports")
+}
+
+model InsightArtifact {
+  id                  String                  @id @default(uuid()) @db.Uuid
+  tenantId            String?                 @map("tenant_id") @db.Uuid
+  artifactType        InsightArtifactType     @map("artifact_type")
+  scope               InsightScope
+  status              InsightStatus           @default(DRAFT)
+  title               String
+  summary             String
+  ownerType           ObjectOwnerType         @default(BANANOS) @map("owner_type")
+  visibilityScope     String                  @map("visibility_scope")
+  cohortId            String?                 @map("cohort_id")
+  confidenceScore     Decimal                 @default(0) @map("confidence_score") @db.Decimal(5, 4)
+  confidenceRationale String?                 @map("confidence_rationale")
+  impactEstimate      Json                    @default("{}") @map("impact_estimate")
+  riskLevel           InsightRiskLevel        @default(LOW) @map("risk_level")
+  generationMethod    InsightGenerationMethod @map("generation_method")
+  modelId             String?                 @map("model_id")
+  promptVersion       String?                 @map("prompt_version")
+  reviewRequired      Boolean                 @default(false) @map("review_required")
+  publishedAt         DateTime?               @map("published_at")
+  validFrom           DateTime?               @map("valid_from")
+  validUntil          DateTime?               @map("valid_until")
+  supersedesInsightId String?                 @map("supersedes_insight_id") @db.Uuid
+  policyId            String?                 @map("policy_id") @db.Uuid
+  consentGrantId      String?                 @map("consent_grant_id") @db.Uuid
+  consentBasis        Json                    @default("{}") @map("consent_basis")
+  revocationBehavior  RevocationBehavior      @default(RECALL) @map("revocation_behavior")
+  currentVersion      Int                     @default(1) @map("current_version")
+  createdBy           String?                 @map("created_by") @db.Uuid
+  metadata            Json                    @default("{}")
+  createdAt           DateTime                @default(now()) @map("created_at")
+  updatedAt           DateTime                @updatedAt @map("updated_at")
+  tenant              Tenant?                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  versions            InsightVersion[]
+  evidence            EvidenceReference[]
+  subjects            InsightSubject[]
+  reviews             InsightReview[]
+  contributions       InsightContribution[]
+  graphNodes          GraphNode[]
+
+  @@index([tenantId, status])
+  @@index([scope, status, publishedAt])
+  @@index([artifactType, riskLevel])
+  @@map("insight_artifacts")
+}
+
+model InsightVersion {
+  id                String              @id @default(uuid()) @db.Uuid
+  insightArtifactId String              @map("insight_artifact_id") @db.Uuid
+  version           Int
+  title             String
+  summary           String
+  structuredClaims  Json                @default("[]") @map("structured_claims")
+  recommendations   Json                @default("[]")
+  content           Json                @default("{}")
+  contentHash       String              @map("content_hash")
+  createdBy         String?             @map("created_by") @db.Uuid
+  createdAt         DateTime            @default(now()) @map("created_at")
+  insightArtifact   InsightArtifact     @relation(fields: [insightArtifactId], references: [id], onDelete: Cascade)
+  evidence          EvidenceReference[]
+
+  @@unique([insightArtifactId, version])
+  @@index([contentHash])
+  @@map("insight_versions")
+}
+
+model EvidenceReference {
+  id                String          @id @default(uuid()) @db.Uuid
+  insightArtifactId String          @map("insight_artifact_id") @db.Uuid
+  insightVersionId  String?         @map("insight_version_id") @db.Uuid
+  tenantId          String?         @map("tenant_id") @db.Uuid
+  evidenceType      EvidenceType    @map("evidence_type")
+  sourceRef         Json            @map("source_ref")
+  ownerType         ObjectOwnerType @map("owner_type")
+  visibilityScope   String          @map("visibility_scope")
+  strength          Decimal         @default(0) @db.Decimal(5, 4)
+  qualityScore      Decimal         @default(0) @map("quality_score") @db.Decimal(5, 4)
+  observedAt        DateTime?       @map("observed_at")
+  citation          String?
+  policyId          String?         @map("policy_id") @db.Uuid
+  consentGrantId    String?         @map("consent_grant_id") @db.Uuid
+  metadata          Json            @default("{}")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  insightArtifact   InsightArtifact @relation(fields: [insightArtifactId], references: [id], onDelete: Cascade)
+  insightVersion    InsightVersion? @relation(fields: [insightVersionId], references: [id], onDelete: SetNull)
+
+  @@index([insightArtifactId, evidenceType])
+  @@index([tenantId, visibilityScope])
+  @@map("evidence_references")
+}
+
+model InsightSubject {
+  id                String          @id @default(uuid()) @db.Uuid
+  insightArtifactId String          @map("insight_artifact_id") @db.Uuid
+  tenantId          String?         @map("tenant_id") @db.Uuid
+  entityType        String          @map("entity_type")
+  entityId          String          @map("entity_id")
+  relationship      String          @default("SUBJECT")
+  metadata          Json            @default("{}")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  insightArtifact   InsightArtifact @relation(fields: [insightArtifactId], references: [id], onDelete: Cascade)
+
+  @@unique([insightArtifactId, entityType, entityId, relationship])
+  @@index([tenantId, entityType, entityId])
+  @@map("insight_subjects")
+}
+
+model InsightReview {
+  id                String                @id @default(uuid()) @db.Uuid
+  insightArtifactId String                @map("insight_artifact_id") @db.Uuid
+  version           Int
+  decision          InsightReviewDecision
+  reviewerId        String?               @map("reviewer_id") @db.Uuid
+  notes             String?
+  checklist         Json                  @default("{}")
+  createdAt         DateTime              @default(now()) @map("created_at")
+  insightArtifact   InsightArtifact       @relation(fields: [insightArtifactId], references: [id], onDelete: Cascade)
+
+  @@index([insightArtifactId, createdAt])
+  @@map("insight_reviews")
+}
+
+model InsightContribution {
+  id                 String             @id @default(uuid()) @db.Uuid
+  insightArtifactId  String             @map("insight_artifact_id") @db.Uuid
+  tenantId           String?            @map("tenant_id") @db.Uuid
+  contributionRef    Json               @map("contribution_ref")
+  weight             Decimal            @default(0) @db.Decimal(5, 4)
+  consentGrantId     String?            @map("consent_grant_id") @db.Uuid
+  revocationBehavior RevocationBehavior @map("revocation_behavior")
+  anonymized         Boolean            @default(false)
+  metadata           Json               @default("{}")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  insightArtifact    InsightArtifact    @relation(fields: [insightArtifactId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, consentGrantId])
+  @@index([insightArtifactId])
+  @@map("insight_contributions")
+}
+
+model GraphNode {
+  id                String            @id @default(uuid()) @db.Uuid
+  tenantId          String?           @map("tenant_id") @db.Uuid
+  insightArtifactId String?           @map("insight_artifact_id") @db.Uuid
+  partition         GraphPartition
+  status            GraphRecordStatus @default(ACTIVE)
+  nodeType          String            @map("node_type")
+  naturalKey        String            @map("natural_key")
+  idempotencyKey    String            @unique @map("idempotency_key")
+  label             String
+  ownerType         ObjectOwnerType   @map("owner_type")
+  visibilityScope   String            @map("visibility_scope")
+  sourceType        String            @map("source_type")
+  sourceRef         Json              @map("source_ref")
+  policyId          String?           @map("policy_id") @db.Uuid
+  consentGrantId    String?           @map("consent_grant_id") @db.Uuid
+  confidenceScore   Decimal           @default(1) @map("confidence_score") @db.Decimal(5, 4)
+  validFrom         DateTime?         @map("valid_from")
+  validUntil        DateTime?         @map("valid_until")
+  observedAt        DateTime?         @map("observed_at")
+  properties        Json              @default("{}")
+  spatialContext    Json              @default("{}") @map("spatial_context")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  tenant            Tenant?           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  insightArtifact   InsightArtifact?  @relation(fields: [insightArtifactId], references: [id], onDelete: SetNull)
+  outgoingEdges     GraphEdge[]       @relation("GraphEdgeFrom")
+  incomingEdges     GraphEdge[]       @relation("GraphEdgeTo")
+
+  @@index([tenantId, partition, nodeType])
+  @@index([naturalKey])
+  @@index([insightArtifactId])
+  @@map("graph_nodes")
+}
+
+model GraphEdge {
+  id              String            @id @default(uuid()) @db.Uuid
+  tenantId        String?           @map("tenant_id") @db.Uuid
+  partition       GraphPartition
+  status          GraphRecordStatus @default(ACTIVE)
+  edgeType        String            @map("edge_type")
+  fromNodeId      String            @map("from_node_id") @db.Uuid
+  toNodeId        String            @map("to_node_id") @db.Uuid
+  idempotencyKey  String            @unique @map("idempotency_key")
+  ownerType       ObjectOwnerType   @map("owner_type")
+  visibilityScope String            @map("visibility_scope")
+  sourceType      String            @map("source_type")
+  sourceRef       Json              @map("source_ref")
+  evidenceRef     Json              @default("{}") @map("evidence_ref")
+  policyId        String?           @map("policy_id") @db.Uuid
+  consentGrantId  String?           @map("consent_grant_id") @db.Uuid
+  confidenceScore Decimal           @default(1) @map("confidence_score") @db.Decimal(5, 4)
+  validFrom       DateTime?         @map("valid_from")
+  validUntil      DateTime?         @map("valid_until")
+  observedAt      DateTime?         @map("observed_at")
+  properties      Json              @default("{}")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  tenant          Tenant?           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fromNode        GraphNode         @relation("GraphEdgeFrom", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNode          GraphNode         @relation("GraphEdgeTo", fields: [toNodeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, partition, edgeType])
+  @@index([fromNodeId, edgeType])
+  @@index([toNodeId, edgeType])
+  @@map("graph_edges")
+}
+
+model GraphChangeProposal {
+  id              String                @id @default(uuid()) @db.Uuid
+  tenantId        String?               @map("tenant_id") @db.Uuid
+  partition       GraphPartition
+  proposalType    String                @map("proposal_type")
+  payload         Json
+  confidenceScore Decimal               @default(0) @map("confidence_score") @db.Decimal(5, 4)
+  proposedBy      String?               @map("proposed_by") @db.Uuid
+  modelId         String?               @map("model_id")
+  promptVersion   String?               @map("prompt_version")
+  decision        GraphProposalDecision @default(PENDING)
+  reviewedBy      String?               @map("reviewed_by") @db.Uuid
+  reviewNotes     String?               @map("review_notes")
+  reviewedAt      DateTime?             @map("reviewed_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  tenant          Tenant?               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, decision])
+  @@index([partition, decision])
+  @@map("graph_change_proposals")
+}
+
+model GraphProjection {
+  id              String                @id @default(uuid()) @db.Uuid
+  tenantId        String?               @map("tenant_id") @db.Uuid
+  name            String
+  partition       GraphPartition
+  status          GraphProjectionStatus @default(DRAFT)
+  visibilityScope String                @map("visibility_scope")
+  queryDefinition Json                  @map("query_definition")
+  privacyControls Json                  @default("{}") @map("privacy_controls")
+  nodeCount       Int                   @default(0) @map("node_count")
+  edgeCount       Int                   @default(0) @map("edge_count")
+  builtAt         DateTime?             @map("built_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  tenant          Tenant?               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, status])
+  @@index([partition, status])
+  @@map("graph_projections")
+}
+
+model GraphOutboxEvent {
+  id             String            @id @default(uuid()) @db.Uuid
+  tenantId       String?           @map("tenant_id") @db.Uuid
+  aggregateType  String            @map("aggregate_type")
+  aggregateId    String            @map("aggregate_id")
+  eventType      String            @map("event_type")
+  idempotencyKey String            @unique @map("idempotency_key")
+  payload        Json
+  status         GraphOutboxStatus @default(PENDING)
+  attempts       Int               @default(0)
+  availableAt    DateTime          @default(now()) @map("available_at")
+  publishedAt    DateTime?         @map("published_at")
+  lastError      String?           @map("last_error")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  tenant         Tenant?           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([status, availableAt])
+  @@index([tenantId, aggregateType])
+  @@map("graph_outbox_events")
+}
+
+model Conversation {
+  id              String               @id @default(uuid()) @db.Uuid
+  tenantId        String               @map("tenant_id") @db.Uuid
+  ownerUserId     String               @map("owner_user_id") @db.Uuid
+  title           String
+  status          ConversationStatus   @default(ACTIVE)
+  purpose         String?
+  memoryEnabled   Boolean              @default(true) @map("memory_enabled")
+  entityContext   Json                 @default("{}") @map("entity_context")
+  metadata        Json                 @default("{}")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+  tenant          Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  ownerUser       User                 @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  messages        ChatMessage[]
+  memories        MemoryEntry[]
+  aiTraces        AiTrace[]
+  attachments     ChatFileAttachment[]
+  reportArtifacts ReportArtifact[]
+
+  @@index([tenantId, ownerUserId, updatedAt])
+  @@map("conversations")
+}
+
+model ChatMessage {
+  id                 String              @id @default(uuid()) @db.Uuid
+  tenantId           String              @map("tenant_id") @db.Uuid
+  conversationId     String              @map("conversation_id") @db.Uuid
+  userId             String?             @map("user_id") @db.Uuid
+  role               ChatMessageRole
+  status             ChatMessageStatus   @default(PENDING)
+  content            String
+  structuredContent  Json                @default("{}") @map("structured_content")
+  riskLevel          AiRiskLevel         @default(LOW) @map("risk_level")
+  confidenceScore    Decimal?            @map("confidence_score") @db.Decimal(5, 4)
+  assumptions        Json                @default("[]")
+  recommendedActions Json                @default("[]") @map("recommended_actions")
+  escalation         Json                @default("{}")
+  errorCode          String?             @map("error_code")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  completedAt        DateTime?           @map("completed_at")
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation       Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user               User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  citations          RetrievalCitation[]
+  aiTraces           AiTrace[]
+  toolInvocations    ToolInvocation[]
+  reportArtifacts    ReportArtifact[]
+
+  @@index([conversationId, createdAt])
+  @@index([tenantId, userId, createdAt])
+  @@map("chat_messages")
+}
+
+model ChatFileAttachment {
+  id             String       @id @default(uuid()) @db.Uuid
+  conversationId String       @map("conversation_id") @db.Uuid
+  fileAssetId    String       @map("file_asset_id") @db.Uuid
+  attachedBy     String?      @map("attached_by") @db.Uuid
+  purpose        String       @default("analysis")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  fileAsset      FileAsset    @relation(fields: [fileAssetId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, fileAssetId])
+  @@index([fileAssetId])
+  @@map("chat_file_attachments")
+}
+
+model MemoryEntry {
+  id                String                 @id @default(uuid()) @db.Uuid
+  tenantId          String?                @map("tenant_id") @db.Uuid
+  userId            String?                @map("user_id") @db.Uuid
+  conversationId    String?                @map("conversation_id") @db.Uuid
+  memoryType        MemoryType             @map("memory_type")
+  scope             MemoryScope
+  content           String
+  structuredValues  Json                   @default("{}") @map("structured_values")
+  sourceRef         Json                   @map("source_ref")
+  ownerType         ObjectOwnerType        @map("owner_type")
+  visibilityScope   String                 @map("visibility_scope")
+  entityType        String?                @map("entity_type")
+  entityId          String?                @map("entity_id")
+  confidenceScore   Decimal                @default(0.5) @map("confidence_score") @db.Decimal(5, 4)
+  consentGrantId    String?                @map("consent_grant_id") @db.Uuid
+  retentionPolicyId String?                @map("retention_policy_id") @db.Uuid
+  retrievalPolicyId String?                @map("retrieval_policy_id") @db.Uuid
+  validationStatus  MemoryValidationStatus @default(PENDING) @map("validation_status")
+  sensitive         Boolean                @default(false)
+  version           Int                    @default(1)
+  expiresAt         DateTime?              @map("expires_at")
+  lastUsedAt        DateTime?              @map("last_used_at")
+  createdBy         String?                @map("created_by") @db.Uuid
+  metadata          Json                   @default("{}")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+  tenant            Tenant?                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user              User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation      Conversation?          @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  citations         RetrievalCitation[]
+
+  @@index([tenantId, scope, validationStatus])
+  @@index([userId, scope, validationStatus])
+  @@index([entityType, entityId])
+  @@map("memory_entries")
+}
+
+model AiTrace {
+  id                String              @id @default(uuid()) @db.Uuid
+  tenantId          String              @map("tenant_id") @db.Uuid
+  conversationId    String?             @map("conversation_id") @db.Uuid
+  messageId         String?             @map("message_id") @db.Uuid
+  userId            String?             @map("user_id") @db.Uuid
+  status            AiTraceStatus       @default(STARTED)
+  intent            String
+  riskLevel         AiRiskLevel         @map("risk_level")
+  providerKey       String?             @map("provider_key")
+  modelKey          String?             @map("model_key")
+  promptTemplateKey String?             @map("prompt_template_key")
+  promptVersion     String?             @map("prompt_version")
+  retrievalSummary  Json                @default("{}") @map("retrieval_summary")
+  policyDecision    Json                @default("{}") @map("policy_decision")
+  outputValidation  Json                @default("{}") @map("output_validation")
+  latencyMs         Int?                @map("latency_ms")
+  errorCode         String?             @map("error_code")
+  metadata          Json                @default("{}")
+  startedAt         DateTime            @default(now()) @map("started_at")
+  completedAt       DateTime?           @map("completed_at")
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation      Conversation?       @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  message           ChatMessage?        @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  user              User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  citations         RetrievalCitation[]
+  toolInvocations   ToolInvocation[]
+
+  @@index([tenantId, startedAt])
+  @@index([conversationId, startedAt])
+  @@map("ai_traces")
+}
+
+model RetrievalCitation {
+  id              String       @id @default(uuid()) @db.Uuid
+  messageId       String       @map("message_id") @db.Uuid
+  aiTraceId       String?      @map("ai_trace_id") @db.Uuid
+  memoryEntryId   String?      @map("memory_entry_id") @db.Uuid
+  sourceType      String       @map("source_type")
+  sourceId        String       @map("source_id")
+  title           String
+  excerpt         String?
+  visibilityScope String       @map("visibility_scope")
+  confidenceScore Decimal      @default(0) @map("confidence_score") @db.Decimal(5, 4)
+  sourceRef       Json         @map("source_ref")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  message         ChatMessage  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  aiTrace         AiTrace?     @relation(fields: [aiTraceId], references: [id], onDelete: SetNull)
+  memoryEntry     MemoryEntry? @relation(fields: [memoryEntryId], references: [id], onDelete: SetNull)
+
+  @@index([messageId, sourceType])
+  @@index([aiTraceId])
+  @@map("retrieval_citations")
+}
+
+model ToolInvocation {
+  id                 String               @id @default(uuid()) @db.Uuid
+  tenantId           String               @map("tenant_id") @db.Uuid
+  aiTraceId          String?              @map("ai_trace_id") @db.Uuid
+  messageId          String?              @map("message_id") @db.Uuid
+  userId             String?              @map("user_id") @db.Uuid
+  toolKey            String               @map("tool_key")
+  status             ToolInvocationStatus @default(REQUESTED)
+  permissionRequired String               @map("permission_required")
+  input              Json
+  output             Json                 @default("{}")
+  errorCode          String?              @map("error_code")
+  startedAt          DateTime?            @map("started_at")
+  completedAt        DateTime?            @map("completed_at")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  tenant             Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  aiTrace            AiTrace?             @relation(fields: [aiTraceId], references: [id], onDelete: SetNull)
+  message            ChatMessage?         @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  user               User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([aiTraceId])
+  @@map("tool_invocations")
+}
+
+model ReportArtifact {
+  id             String               @id @default(uuid()) @db.Uuid
+  tenantId       String               @map("tenant_id") @db.Uuid
+  conversationId String?              @map("conversation_id") @db.Uuid
+  messageId      String?              @map("message_id") @db.Uuid
+  requestedBy    String?              @map("requested_by") @db.Uuid
+  title          String
+  reportType     String               @map("report_type")
+  format         String               @default("json")
+  status         ReportArtifactStatus @default(REQUESTED)
+  content        Json                 @default("{}")
+  objectKey      String?              @map("object_key")
+  sourceRefs     Json                 @default("[]") @map("source_refs")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  completedAt    DateTime?            @map("completed_at")
+  tenant         Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversation   Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  message        ChatMessage?         @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  user           User?                @relation(fields: [requestedBy], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([conversationId])
+  @@map("report_artifacts")
+}
+
+model PromptTemplate {
+  id              String      @id @default(uuid()) @db.Uuid
+  tenantId        String?     @map("tenant_id") @db.Uuid
+  key             String
+  version         Int
+  status          String      @default("DRAFT")
+  useCase         String      @map("use_case")
+  template        String
+  requiredContext Json        @default("[]") @map("required_context")
+  outputSchema    Json        @default("{}") @map("output_schema")
+  riskLimit       AiRiskLevel @default(MEDIUM) @map("risk_limit")
+  metadata        Json        @default("{}")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+  tenant          Tenant?     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, key, version])
+  @@index([key, status])
+  @@map("prompt_templates")
+}
+
+model ModelProfile {
+  id                String      @id @default(uuid()) @db.Uuid
+  tenantId          String?     @map("tenant_id") @db.Uuid
+  providerKey       String      @map("provider_key")
+  modelKey          String      @map("model_key")
+  status            String      @default("ACTIVE")
+  approvedUseCases  String[]    @map("approved_use_cases")
+  maximumRisk       AiRiskLevel @default(MEDIUM) @map("maximum_risk")
+  costProfile       Json        @default("{}") @map("cost_profile")
+  latencyProfile    Json        @default("{}") @map("latency_profile")
+  evaluationSummary Json        @default("{}") @map("evaluation_summary")
+  metadata          Json        @default("{}")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+  tenant            Tenant?     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, providerKey, modelKey])
+  @@index([status, maximumRisk])
+  @@map("model_profiles")
+}

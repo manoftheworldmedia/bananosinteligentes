@@ -1,0 +1,23 @@
+{
+  "name": "@bananos/worker",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/worker.js",
+  "types": "dist/worker.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "check": "tsc -b --pretty false",
+    "dev": "tsc -b --watch",
+    "start": "node dist/worker.js",
+    "test": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@bananos/billing": "workspace:*",
+    "@bananos/config": "workspace:*",
+    "@bananos/database": "workspace:*",
+    "@bananos/ingestion": "workspace:*",
+    "@bananos/knowledge-graph": "workspace:*",
+    "@bananos/object-storage": "workspace:*"
+  }
+}
